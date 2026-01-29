@@ -17,7 +17,7 @@
     "clean": "rimraf dist",
     "prebuild": "npm run clean",
     "postbuild": "npm run copy-files",
-    "copy-files": "cp package.json dist/ && cp .env.example dist/",
+    "copy-files": "node -e \"const fs=require('fs'); fs.mkdirSync('dist',{recursive:true}); fs.copyFileSync('package.json','dist/package.json'); if(fs.existsSync('.env.example')) fs.copyFileSync('.env.example','dist/.env.example');\"",
     "typecheck": "tsc --noEmit",
     "db:seed": "ts-node scripts/seedDatabase.ts",
     "healthcheck": "curl -f http://localhost:5000/health || exit 1"
