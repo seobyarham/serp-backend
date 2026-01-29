@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "nodemon src/server.ts",
     "build": "tsc",
+    "build:render": "tsc -p tsconfig.render.json",
     "start": "node dist/server.js",
     "start:prod": "NODE_ENV=production node dist/server.js",
     "test": "jest",
