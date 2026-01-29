@@ -1,0 +1,1 @@
+fix all backend issues, it should connected with frontend, track exact ranking of keywords on SERP with connected APIs (one or multiple), don't give me test codes, give me exact codes jis file main change hai wo new day do, API main frontend main add kru ga, Server.ts check kro, ye aik professional server hona chaiye
