@@ -41,9 +41,16 @@ export const connectDatabase = async (): Promise<void> => {
 };
 
 function getDatabaseConfig(): DatabaseConfig {
-  const mongoUri = process.env.MONGODB_URI || 
-                   process.env.DATABASE_URL || 
-                   'mongodb://localhost:27017/serp_tracker';
+  // Prefer explicit environment variables. In production require a connection string
+  const envMongo = process.env.MONGODB_URI || process.env.DATABASE_URL;
+
+  if (!envMongo && process.env.NODE_ENV === 'production') {
+    const errMsg = 'MONGODB_URI (or DATABASE_URL) is not set. In production you must provide a MongoDB connection string via the MONGODB_URI or DATABASE_URL environment variable.';
+    logger.error(errMsg);
+    throw new Error(errMsg);
+  }
+
+  const mongoUri = envMongo || 'mongodb://localhost:27017/serp_tracker';
 
   // Enhanced connection options for production
   const options: mongoose.ConnectOptions = {
