@@ -52,6 +52,20 @@ function getDatabaseConfig(): DatabaseConfig {
 
   const mongoUri = envMongo || 'mongodb://localhost:27017/serp_tracker';
 
+  // Validate MongoDB URI for common placeholders
+  if (mongoUri.includes('<cluster>') || mongoUri.includes('<password>') || mongoUri.includes('<username>')) {
+    const errMsg = 'Invalid MONGODB_URI: contains unresolved placeholders (e.g., <cluster>, <username>, <password>). Replace with your actual MongoDB connection string from Atlas or your MongoDB provider.';
+    logger.error(errMsg);
+    throw new Error(errMsg);
+  }
+
+  // Detect SRV record template without actual hostname
+  if (/_mongodb\._tcp\.<cluster>/i.test(mongoUri)) {
+    const errMsg = 'Invalid MONGODB_URI: contains MongoDB SRV template with <cluster> placeholder. Use your actual MongoDB Atlas cluster name (e.g., mongodb+srv://user:pass@mycluster.mongodb.net/dbname).';
+    logger.error(errMsg);
+    throw new Error(errMsg);
+  }
+
   // Enhanced connection options for production
   const options: mongoose.ConnectOptions = {
     // Connection pool settings
